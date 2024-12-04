@@ -1,16 +1,25 @@
 import React, {useState} from 'react';
 import './companies.css';
 import firebase from "../firebase/Firebase";
+import useStateWithCallback from 'use-state-with-callback';
 
-var db =  firebase.firestore();
+
 
 function Grid(props){
-    const [data, setData] = useState({
+    const [data, setData] = useStateWithCallback({
         name: props.name,
         email: props.email,
         phone: props.phone,
         address: props.address,
         type: props.type
+    }, changes =>{
+      firebase.firestore().collection('CompanyDetails').doc(props.id).update({
+        name: changes['name'],
+        email: changes['email'],
+        phone: changes['phone'],
+        address: changes['address'],
+        type: changes['type']
+    })
     })
 
     function handleChange(event){
@@ -22,7 +31,7 @@ function Grid(props){
         [name]: value
       };
     });
-        db.collection('CompanyDetails').doc(props.id).update({
+    firebase.firestore().collection('CompanyDetails').doc(props.id).update({
             name: data.name,
             email: data.email,
             phone: data.phone,
@@ -34,7 +43,7 @@ function Grid(props){
     function deleteRecord(e){
         e.preventDefault();
         let id = props.id
-        db.collection('CompanyDetails').doc(id).delete();
+        firebase.firestore().collection('CompanyDetails').doc(id).delete();
     }
     
     return <div className="grid-body" id={props.id} >

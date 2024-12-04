@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import './companies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import firebase from "../firebase/Firebase";
-import '../../assets/styles/common.css';
 import Grid from "./Grid";
 import Form from "./Form";
 
@@ -25,11 +24,7 @@ function camelCase(str){
     return (str.slice(0,1)).toUpperCase()+str.slice(1).toLowerCase();
 }
 function useDbData(sortBy='NAME_ASC', searchBy='SNAME'){
-    console.log(sortBy);
-    console.log(searchBy.to);
-    console.log(camelCase(searchBy));
-    console.log([searchBy, searchBy.toUpperCase(), searchBy.toLowerCase(), camelCase(searchBy)]);
-    
+        
     const [dbData, setDbData] = useState([]);
     useEffect(() => {
       if(searchBy != "SNAME" && searchBy.length != 0){
@@ -45,7 +40,7 @@ function useDbData(sortBy='NAME_ASC', searchBy='SNAME'){
             setDbData(newDbData);
         })
         }else {
-            console.log("is empty");
+
             firebase.firestore()
         .collection('CompanyDetails')
         .orderBy(SORT_OPTIONS[sortBy].column, SORT_OPTIONS[sortBy].direction)
@@ -69,7 +64,6 @@ function Companies() {
 
     function handleSearch(e){
         setSearchBy(e.currentTarget.value);
-        console.log(searchBy);
     }
     function handleClick(data){
         firebase.firestore().collection('CompanyDetails').add({
